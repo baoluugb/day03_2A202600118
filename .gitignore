@@ -5,4 +5,4 @@ __pycache__/
 .DS_Store
 models/
 
-report/INDIVIDUAL_REPORT_*.md
+tests/test_local.py

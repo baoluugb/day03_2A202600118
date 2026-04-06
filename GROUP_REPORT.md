@@ -1,7 +1,7 @@
 # Báo Cáo Nhóm: Lab 3 - Hệ Thống Agentic Cấp Sản Xuất
 
-- **Tên Nhóm**: Lab Chatbot vs ReAct Agent
-- **Thành Viên Nhóm**: Elly (Git user)
+- **Tên Nhóm**: C401-F3
+- **Thành Viên Nhóm**: Khương Hải Lâm, Lưu Lê Gia Bảo, Đặng Tuấn Anh, Lương Trung Kiên, Thái Doãn Minh Hải, Hoàng Quốc Hùng
 - **Ngày Triển Khai**: 2026-04-06
 
 ---
@@ -11,12 +11,14 @@
 Hệ thống này được phát triển để so sánh hiệu suất của một chatbot tiêu chuẩn với một ReAct Agent tiên tiến trong lĩnh vực lữ hành và đặt phòng khách sạn.
 
 ### Mục Tiêu Chính:
+
 - Xây dựng một **ReAct Agent** (Reasoning + Acting) sử dụng vòng lặp Thought-Action-Observation
 - Tích hợp nhiều công cụ để xử lý các truy vấn đa bước
 - Cài đặt hệ thống **ghi nhớ người dùng** trong phiên làm việc hiện tại
 - Tập trung dữ liệu từ nhiều công cụ vào một cơ sở dữ liệu thống nhất
 
 ### Kết Quả Chính:
+
 - **Số công cụ tích hợp**: 7 công cụ (tìm kiếm khách sạn, chi tiết khách sạn, đặt phòng, hủy đặt, kiểm tra đặt, xem đánh giá, tính khoảng cách)
 - **Cơ sở dữ liệu thống nhất**: Tất cả dữ liệu (thành phố, khách sạn, đánh giá) được lưu trữ trong `database.md`
 - **Hệ thống ghi nhớ**: Agent có thể ghi nhớ các ưu tiên người dùng trong suốt phiên làm việc
@@ -50,6 +52,7 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ```
 
 **Các thành phần chính:**
+
 - `ReActAgent` (src/agent/agent.py): Triển khai vòng lặp ReAct
 - `LLMProvider`: Cung cấp giao diện thống nhất cho LLM
 - `UserProfile`: Lưu trữ ưu tiên người dùng và lịch sử
@@ -59,19 +62,20 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 
 ### 2.2 Danh Mục Công Cụ (Inventory)
 
-| Tên Công Cụ | Định Dạng Input | Trường Hợp Sử Dụng | Trạng Thái |
-| :--- | :--- | :--- | :--- |
-| `get_distance` | string, string | Tính khoảng cách giữa hai thành phố | ✓ Hoạt động |
-| `search_hotels` | city, checkin, checkout, max_price, min_stars | Tìm kiếm khách sạn theo tiêu chí | ✓ Hoạt động |
-| `get_hotel_details` | hotel_id | Lấy chi tiết đầy đủ của khách sạn | ✓ Hoạt động |
-| `book_hotel` | hotel_id, guest_name, checkin, checkout, num_rooms | Đặt phòng khách sạn | ✓ Hoạt động |
-| `cancel_booking` | booking_id | Hủy đặt phòng hiện tại | ✓ Hoạt động |
-| `get_booking_info` | booking_id | Kiểm tra thông tin đặt phòng | ✓ Hoạt động |
-| `get_hotel_reviews` | hotel_id | Xem đánh giá và nhận xét khách hàng | ✓ Hoạt động |
+| Tên Công Cụ         | Định Dạng Input                                    | Trường Hợp Sử Dụng                  | Trạng Thái  |
+| :------------------ | :------------------------------------------------- | :---------------------------------- | :---------- |
+| `get_distance`      | string, string                                     | Tính khoảng cách giữa hai thành phố | ✓ Hoạt động |
+| `search_hotels`     | city, checkin, checkout, max_price, min_stars      | Tìm kiếm khách sạn theo tiêu chí    | ✓ Hoạt động |
+| `get_hotel_details` | hotel_id                                           | Lấy chi tiết đầy đủ của khách sạn   | ✓ Hoạt động |
+| `book_hotel`        | hotel_id, guest_name, checkin, checkout, num_rooms | Đặt phòng khách sạn                 | ✓ Hoạt động |
+| `cancel_booking`    | booking_id                                         | Hủy đặt phòng hiện tại              | ✓ Hoạt động |
+| `get_booking_info`  | booking_id                                         | Kiểm tra thông tin đặt phòng        | ✓ Hoạt động |
+| `get_hotel_reviews` | hotel_id                                           | Xem đánh giá và nhận xét khách hàng | ✓ Hoạt động |
 
 ---
 
 ### 2.3 Nhà Cung Cấp LLM Sử Dụng
+
 - **Chính**: OpenAI GPT-4o
 - **Hỗ trợ (Tương lai)**: Gemini 1.5 Flash, Phi-3 (mô hình địa phương)
 
@@ -82,6 +86,7 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### Dữ Liệu Thu Thập
 
 **Mỗi lần chạy agent ghi nhận:**
+
 - `AGENT_START`: Input người dùng và mô hình LLM
 - `LLM_OUTPUT`: Đầu ra từ mỗi bước suy luận
 - `TOOL_CALL`: Tên công cụ, tham số, và kết quả
@@ -101,6 +106,7 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ## 4. Phân Tích Nguyên Nhân Gốc (RCA) - Các Trường Hợp Thất Bại
 
 ### Trường Hợp Nghiên Cứu 1: Agent Gọi Sai Công Cụ
+
 - **Input**: "Tôi muốn khách sạn 5 sao ở Hà Nội"
 - **Hành Động Mong Đợi**: Gọi `search_hotels("Hanoi", ...)`
 - **Lỗi Tiềm Ẩn**: Agent có thể gọi `get_distance` nếu không hiểu rõ ngữ cảnh
@@ -108,17 +114,20 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 - **Giải Pháp**: Thêm ví dụ (few-shot) trong system prompt
 
 ### Trường Hợp Nghiên Cứu 2: Phân Tích Tham Số Sai
+
 - **Input**: "Tìm khách sạn dưới $100 ở TPHCM từ ngày 8/8/2025 đến 10/8/2025"
 - **Lỗi Tiềm Ẩn**: Agent gọi `search_hotels("Ho Chi Minh", "8/8/2025", "10/8/2025")` thay vì `"2025-08-08"`, `"2025-08-10"`
 - **Nguyên Nhân**: Định dạng ngày tháng không được mô tả rõ trong tool description
 - **Giải Pháp**: Cập nhật mô tả công cụ để bao gồm định dạng chính xác
 
 ### Trường Hợp Nghiên Cứu 3: Không Ghi Nhớ Ưu Tiên Người Dùng
+
 - **Trước Cải Tiến**: Agent quên đi ưu tiên người dùng (ví dụ: 5 sao, dưới $200) ở lần truy vấn tiếp theo
 - **Sau Cải Tiến**: `UserProfile` lưu trữ ưu tiên và truyền vào `agent.user_context`
 - **Kết Quả**: Agent có thể sử dụng các ưu tiế đã lưu để cải thiện khuyến nghị
 
 ### Trường Hợp Nghiên Cứu 4: Dữ Liệu Không Nhất Quán
+
 - **Vấn Đề**: Dữ liệu khách sạn bị lưu trữ ở nhiều nơi (hardcode, review file, database)
 - **Cơ Sở Dữ Liệu Thống Nhất**: Tất cả dữ liệu được tập trung vào `database.md`
 - **Lợi Ích**: Duy trì dữ liệu dễ dàng, tránh mâu thuẫn, quản lý phạm vi khách sạn có sẵn
@@ -129,12 +138,12 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 
 ### Thí Nghiệm 1: Chatbot Tiêu Chuẩn vs ReAct Agent
 
-| Trường Hợp | Chatbot Tiêu Chuẩn | ReAct Agent | Người Thắng |
-| :--- | :--- | :--- | :--- |
-| Truy vấn đơn giản (1 công cụ) | Đúng | Đúng | Hòa |
-| Truy vấn đa bước (3+ công cụ) | Sai hoặc hỗ trợ chung chung | Đúng | **Agent** |
-| Ghi nhớ ưu tiên người dùng | Không (reset mỗi lần) | Có (qua UserProfile) | **Agent** |
-| Lỗi xử lý công cụ | Không xử lý | Ghi lại lỗi, thử lại | **Agent** |
+| Trường Hợp                    | Chatbot Tiêu Chuẩn          | ReAct Agent          | Người Thắng |
+| :---------------------------- | :-------------------------- | :------------------- | :---------- |
+| Truy vấn đơn giản (1 công cụ) | Đúng                        | Đúng                 | Hòa         |
+| Truy vấn đa bước (3+ công cụ) | Sai hoặc hỗ trợ chung chung | Đúng                 | **Agent**   |
+| Ghi nhớ ưu tiên người dùng    | Không (reset mỗi lần)       | Có (qua UserProfile) | **Agent**   |
+| Lỗi xử lý công cụ             | Không xử lý                 | Ghi lại lỗi, thử lại | **Agent**   |
 
 **Kết Luận**: ReAct Agent vượt trội trong các truy vấn phức tạp và trải nghiệm người dùng dài hạn.
 
@@ -161,11 +170,13 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 6.1 Bảo Mật
 
 **Hiện Tại:**
+
 - ✓ Xác thực API key từ `.env`
 - ✓ Không log API key hoặc dữ liệu nhạy cảm
 - ✓ Input người dùng được truyền qua system prompt (không thực thi code)
 
 **Cần Cải Tiến:**
+
 - [ ] Xác thực input cho tham số công cụ (ví dụ: hotel_id phải là định dạng HN001)
 - [ ] Rate limiting để tránh DDoS
 - [ ] Mã hóa dữ liệu người dùng nếu lưu trữ lâu dài
@@ -173,11 +184,13 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 6.2 Hàng Rào Bảo Vệ (Guardrails)
 
 **Hiện Tại:**
+
 - ✓ Giới hạn số bước (max_steps = 6) để tránh vòng lặp vô hạn
 - ✓ Xử lý lỗi công cụ với thông báo rõ ràng
 - ✓ Timeout ngầm từ OpenAI API
 
 **Cần Cải Tiến:**
+
 - [ ] Giới hạn chi phí token (ví dụ: tối đa 1000 tokens/truy vấn)
 - [ ] Kiểm tra đầu vào (input validation) cho các tham số
 - [ ] Fallback khi LLM không thể phân tích công cụ
@@ -185,11 +198,13 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 6.3 Khả Năng Mở Rộng (Scaling)
 
 **Hiện Tại:**
+
 - ✓ ReActAgent có thể xử lý 7 công cụ hiện tại
 - ✓ Tool registry linh hoạt (dễ thêm công cụ mới)
 - ✓ Chạy đơn luồng (single-threaded)
 
 **Khuyến Nghị Sản Xuất:**
+
 - [ ] Chuyển sang LangGraph để quản lý các workflow phức tạp
 - [ ] Sử dụng message queue (Redis) cho yêu cầu đồng thời
 - [ ] Lưu vào cơ sở dữ liệu SQL (PostgreSQL) thay vì file `.md`
@@ -198,10 +213,12 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 6.4 Theo Dõi & Logging
 
 **Hiện Tại:**
+
 - ✓ Các sự kiện chính được ghi lại (AGENT_START, LLM_OUTPUT, TOOL_CALL, AGENT_END)
 - ✓ Lỗi công cụ được bắt và ghi nhớ
 
 **Cần Cải Tiến:**
+
 - [ ] Ghi vào file JSON (thay vì stdout) cho phân tích sau
 - [ ] Tích hợp với dịch vụ monitoring (Datadog, New Relic)
 - [ ] Dashboard thời gian thực (Grafana)
@@ -209,10 +226,12 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 6.5 Độ Tin Cậy
 
 **Hiện Tại:**
+
 - ✓ Xử lý ngoại lệ ở mức công cụ và agent
 - ✓ Không có crash ngay cả khi công cụ thất bại
 
 **Cần Cải Tiến:**
+
 - [ ] Cơ chế retry cho công cụ (ví dụ: retry lên đến 3 lần)
 - [ ] Fallback LLM (nếu GPT-4o lỗi, thử Gemini)
 - [ ] Health checks định kỳ cho các công cụ
@@ -224,6 +243,7 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 7.1 Thành Tựu
 
 ✓ **Hoàn thành 100% các mục tiêu:**
+
 1. ✓ Xây dựng ReAct Agent hoàn chỉnh
 2. ✓ Tích hợp 7 công cụ lữ hành/khách sạn
 3. ✓ Cài đặt hệ thống ghi nhớ người dùng
@@ -233,16 +253,19 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 ### 7.2 Các Đề Xuất Tiếp Theo
 
 **Ngắn hạn (1-2 tuần):**
+
 - Viết unit tests cho từng công cụ
 - Thêm xác thực input
 - Cải thiện prompt hệ thống với ví dụ (few-shot)
 
 **Trung hạn (1-2 tháng):**
+
 - Chuyển database.md sang PostgreSQL
 - Thêm authentication người dùng
 - Tích hợp thanh toán thực tế (Stripe)
 
 **Dài hạn (3-6 tháng):**
+
 - Chuyển sang LangGraph cho workflow phức tạp
 - Thêm hỗ trợ đa ngôn ngữ
 - Triển khai trên Kubernetes
@@ -251,12 +274,12 @@ Hệ thống này được phát triển để so sánh hiệu suất của mộ
 
 ## 8. Lịch Sử Thay Đổi
 
-| Ngày | Thay Đổi | Chi Tiết |
-| :--- | :--- | :--- |
-| 2026-04-06 | Tập trung dữ liệu | Tất cả dữ liệu → `database.md` |
-| 2026-04-06 | Hệ thống ghi nhớ | Thêm `UserProfile`, giữ history |
-| 2026-04-06 | Cải tiến agent | Hỗ trợ `user_context` trong prompt |
-| 2026-04-06 | Phạm vi khách sạn | Thêm ngày bắt đầu/kết thúc |
+| Ngày       | Thay Đổi          | Chi Tiết                           |
+| :--------- | :---------------- | :--------------------------------- |
+| 2026-04-06 | Tập trung dữ liệu | Tất cả dữ liệu → `database.md`     |
+| 2026-04-06 | Hệ thống ghi nhớ  | Thêm `UserProfile`, giữ history    |
+| 2026-04-06 | Cải tiến agent    | Hỗ trợ `user_context` trong prompt |
+| 2026-04-06 | Phạm vi khách sạn | Thêm ngày bắt đầu/kết thúc         |
 
 ---
 
